@@ -1,0 +1,54 @@
+service: snowflake-translate
+
+frameworkVersion: "2"
+variablesResolutionMode: 20210326
+
+plugins:
+  - serverless-python-requirements
+  - serverless-deployment-bucket
+
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
+
+  stage: "${self:provider.stage}"
+
+
+provider:
+  name: aws
+  stage: ${opt:stage, 'dev'}
+  region: us-west-2
+  runtime: python3.8
+  lambdaHashingVersion: 20201221
+  iam:
+    role:
+      statements:
+        - Effect: 'Allow'
+          Action:
+            - 'translate:TranslateText'
+          Resource: "*"
+  apiGateway:
+    resourcePolicy:
+      - Effect: Allow
+        Principal:
+            AWS: "arn:aws:sts::${aws:accountId}:assumed-role/SnowflakeExternalFunctionsRole/snowflake"
+        Action: execute-api:Invoke
+        Resource:
+          - arn:aws:execute-api:${aws:region}:${aws:accountId}:*
+
+package:
+  exclude:
+    - .git/**
+    - .env/**
+    - node_modules/**
+
+functions:
+  snowflake-translate:
+    handler: translate_from_english.handler
+    events:
+      - http:
+          path: translate/from_english
+          method: post
+          authorizer: aws_iam
+    timeout: 30
+    memorySize: 1024

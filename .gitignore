@@ -1,0 +1,13 @@
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+.env/
+.env_v2/
+.DS_Store
+*/.DS_Store
+.idea
+*.csv
+.serverless/
+node_modules/
+package-lock.json
+package.json
