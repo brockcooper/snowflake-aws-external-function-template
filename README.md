@@ -6,7 +6,7 @@ This repo contains a template to deploy a lambda function using Github Actions t
 
 ### Example Complete External Function Repo
 
-[This repo](https://github.com/brockcooper/translate-text-snowflake-external-function) is an example of a complete AWS Lambda function that is used as an Extneral Function.
+[This repo](https://github.com/brockcooper/translate-text-snowflake-external-function) is an example of a complete AWS Lambda function that is used as an External Function.
 
 ### How to Deploy
 
