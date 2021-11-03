@@ -1,22 +1,19 @@
 import unittest
 import json
-import translate_from_english
+import lambda_function
 
 
-class TranslateFromEnglish(unittest.TestCase):
+class LambdaFunction(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         event = {"body": {
             "data": [
-                [0, "Hello", ["es", "fr"]],
-                [1, """All other supported data types are serialized
-                    as JSON strings.""", ["es", "fr"]],
-                [2, """Examples of extracting data are included in the
-                    documentation for creating a remote service
-                    on each platform""", ["es", "fr"]]
+                [0, "Test 0"],
+                [1, "Test 1"],
+                [2, "Test 2"],
             ]
         }}
-        self.results = translate_from_english.handler(event, 'context', local=True)
+        self.results = lambda_function.handler(event, 'context', local=True)
 
     def test_body_is_json(self):
         self.assertIsInstance(self.results["body"], str)
@@ -36,14 +33,6 @@ class TranslateFromEnglish(unittest.TestCase):
         for row in body["data"]:
             self.assertIs(row[0], n)
             n += 1
-
-    def test_translation(self):
-        translation = json.loads(self.results["body"])["data"][0][1]
-        self.assertIsInstance(translation, list)
-        self.assertEqual(translation[0]["translated_text"], 'Hola')
-        self.assertEqual(translation[1]["translated_text"], 'Bonjour')
-        self.assertEqual(translation[0]["status"], 'success')
-        self.assertEqual(translation[1]["status"], 'success')
 
 
 if __name__ == '__main__':
