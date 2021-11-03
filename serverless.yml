@@ -17,7 +17,7 @@ custom:
 provider:
   name: aws
   stage: ${opt:stage, 'dev'}
-  region: us-west-2
+  region: ${env:AWS_DEFAULT_REGION, 'us-west-2'}
   runtime: python3.8
   lambdaHashingVersion: 20201221
   # Add IAM permissions for your Lambda Function as needed:
