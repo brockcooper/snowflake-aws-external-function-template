@@ -1,4 +1,4 @@
-service: ${env:GITHUB_REPOSITORY}
+service: snowflake-external-function
 
 frameworkVersion: "2"
 variablesResolutionMode: 20210326
@@ -44,7 +44,7 @@ package:
     - node_modules/**
 
 functions:
-  SnowflakeExternalFunction:
+  snowflake-external-function:
     handler: lambda_function.handler
     events:
       - http:
