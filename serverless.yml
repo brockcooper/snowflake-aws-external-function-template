@@ -1,4 +1,4 @@
-service: snowflake-translate
+service: ${env:GITHUB_REPOSITORY}
 
 frameworkVersion: "2"
 variablesResolutionMode: 20210326
@@ -20,18 +20,19 @@ provider:
   region: us-west-2
   runtime: python3.8
   lambdaHashingVersion: 20201221
-  iam:
-    role:
-      statements:
-        - Effect: 'Allow'
-          Action:
-            - 'translate:TranslateText'
-          Resource: "*"
+  # Add IAM permissions for your Lambda Function as needed:
+  # iam:
+  #   role:
+  #     statements:
+  #       - Effect: 'Allow'
+  #         Action:
+  #           - 'translate:TranslateText'
+  #         Resource: "*"
   apiGateway:
     resourcePolicy:
       - Effect: Allow
         Principal:
-            AWS: "arn:aws:sts::${aws:accountId}:assumed-role/SnowflakeExternalFunctionsRole/snowflake"
+            AWS: "arn:aws:sts::${aws:accountId}:assumed-role/${env:SNOWFLAKE_IAM_ROLE, 'SnowflakeExternalFunctionsRole'}/snowflake"
         Action: execute-api:Invoke
         Resource:
           - arn:aws:execute-api:${aws:region}:${aws:accountId}:*
@@ -43,11 +44,11 @@ package:
     - node_modules/**
 
 functions:
-  snowflake-translate:
-    handler: translate_from_english.handler
+  SnowflakeExternalFunction:
+    handler: lambda_function.handler
     events:
       - http:
-          path: translate/from_english
+          path: /external_function
           method: post
           authorizer: aws_iam
     timeout: 30
